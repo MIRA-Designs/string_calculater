@@ -14,7 +14,8 @@
 #   5. The `add` method raising an exception if negative numbers present in the string
 #   6. The `add` method should also handle multiple negative numbers showing all negative numbers in exception message
 #   7. The `add` method should ignore numbers greater than 1000
-#   8. Delimiters can be of any length with the format: "//[delimiter]\n"
+#   8. Delimiters can be of any length with the format: "//[delimiter delimiter ..]\n..."
+#   9. Allow multiple delimiters with the format: "//[delimiter1][delimiter2]\n.."
 ##################################################################################
 class StringCalculator
   MAX_VALUE = 1000
@@ -40,10 +41,12 @@ class StringCalculator
 
   # if the string contains a custom delimiter, extract it
   def extract_custom_delimiters(string)
-    # handle custom delimiter: //delimiter\n
-    if string.start_with?('//[')
-      string_after_newline(string, string[3])
-    # handle bracketed delimiters: //[delimiter..]\n
+    # if string format: //[delimiter delimiter ..]\n... or //[delimiter1][delimiter2]\n...
+    multi_delimiters = string.scan(/\[(.*?)\]/).flatten
+    if multi_delimiters.any?
+      multi_delimiters.each { |delimiter| string = string_after_newline(string, delimiter) }
+      string
+    # if string format: //delimiter\n...
     elsif string.start_with?('//')
       string_after_newline(string, string[2])
     else
@@ -59,6 +62,7 @@ class StringCalculator
 
   def string_after_newline(string, delimiter)
     first_newline_pos = string.index("\n")
-    string[first_newline_pos + 1..].tr(delimiter, ',')
+    string = string[first_newline_pos + 1..] if first_newline_pos
+    string.tr(delimiter, ',')
   end
 end
