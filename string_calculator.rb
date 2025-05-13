@@ -12,24 +12,39 @@
 #   4. The `add` method should also handle custom delimiters by allowing the user to specify a delimiter
 #        at the beginning of the string after the `//` prefix
 #   5. The `add` method raising an exception if negative numbers present in the string
+#   6. The `add` method should also handle multiple negative numbers showing all negative numbers in exception message
 ##################################################################################
 class StringCalculator
   def add(string)
     # If the string is empty, return 0
     return 0 if string.empty?
 
-    # If the string contains negative numbers, raise an exception
+    raise_if_negatives!(string)
+    string = extract_custom_delimiters(string)
+
+    numbers = numbers_array(string)
+    numbers.sum
+  end
+
+  private
+
+  # If the string contains negative numbers, raise an exception
+  def raise_if_negatives!(string)
     negative_numbers = string.scan(/-\d+/)
     raise "negative numbers not allowed #{negative_numbers.join(', ')}" if negative_numbers.any?
+  end
 
-    # if the string contains a custom delimiter, extract it
-    if string.start_with?('//')
-      delimiter = string[2]
-      string = string[4..].tr(delimiter, ',')
-    end
+  # if the string contains a custom delimiter, extract it
+  def extract_custom_delimiters(string)
+    return string unless string.start_with?('//')
 
-    # If the string contains only one number, return that number. Ommit newlines and split by commas
+    delimiter = string[2]
+    string[4..].tr(delimiter, ',')
+  end
+
+  # Replace new lines with commas and split by comma
+  def numbers_array(string)
     comma_separated = string.tr("\n", ',').split(',')
-    comma_separated.map(&:to_i).sum
+    comma_separated.map(&:to_i)
   end
 end
