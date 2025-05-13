@@ -4,6 +4,7 @@
 # StringCalculator class that has only one method `add`
 #   The `add` method takes a string that contains numbers separated by commas, delimiters, or newlines
 #   and returns the sum of numbers by ommitting the delimiters, commas, and newlines
+#   1. The `add` method should return 0 for an empty string
 ##################################################################################
 class StringCalculator
   def add(string)
