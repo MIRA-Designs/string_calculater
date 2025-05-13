@@ -9,8 +9,11 @@ require_relative 'string_calculator'
 #   The test cases are written in a way that they can be run using `ruby test_string_calculator.rb`
 ##################################################################################
 class TestStringCalculator < Minitest::Test
+  def setup
+    @calculator = StringCalculator.new
+  end
+
   def test_empty_string
-    str_cal = StringCalculator.new
-    assert_equal 0, str_cal.add('')
+    assert_equal 0, @calculator.add('')
   end
 end
