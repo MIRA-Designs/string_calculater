@@ -14,6 +14,8 @@
 #   5. The `add` method raising an exception if negative numbers present in the string
 #   6. The `add` method should also handle multiple negative numbers showing all negative numbers in exception message
 #   7. The `add` method should ignore numbers greater than 1000
+#   8. Delimiters can be of any length with the format: "//[delimiter delimiter ..]\n..."
+#   9. Allow multiple delimiters with the format: "//[delimiter1][delimiter2]\n.."
 ##################################################################################
 class StringCalculator
   MAX_VALUE = 1000
@@ -39,15 +41,33 @@ class StringCalculator
 
   # if the string contains a custom delimiter, extract it
   def extract_custom_delimiters(string)
-    return string unless string.start_with?('//')
-
-    delimiter = string[2]
-    string[4..].tr(delimiter, ',')
+    # if string format: //[delimiter delimiter ..]\n... or //[delimiter1][delimiter2]\n...
+    multi_delimiters = string.scan(/\[(.*?)\]/).flatten
+    if multi_delimiters.any?
+      multi_delimiters.each { |delimiter| string = replace_delimiter_by_comma(string, delimiter) }
+      string_after_newline(string)
+    # if string format: //delimiter\n...
+    elsif string.start_with?('//')
+      string = replace_delimiter_by_comma(string, string[2])
+      string_after_newline(string)
+    else
+      string
+    end
   end
 
   # Replace new lines with commas and split by comma
   def numbers_array(string)
     comma_separated = string.tr("\n", ',').split(',')
     comma_separated.map(&:to_i)
+  end
+
+  # Extract the string after the first newline character
+  def string_after_newline(string)
+    first_newline_pos = string.index("\n") + 1
+    string[first_newline_pos..]
+  end
+
+  def replace_delimiter_by_comma(string, delimiter)
+    string.tr(delimiter, ',')
   end
 end

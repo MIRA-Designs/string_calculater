@@ -37,7 +37,7 @@ class TestStringCalculator < Minitest::Test
     assert_equal 10, @calculator.add("1\n2\n3,4\n\n \n \n")
   end
 
-  # format: //[delimiter]\n[numbers]
+  # format: //delimiter\n...
   def test_custom_single_char_delimiter
     assert_equal 3, @calculator.add("//;\n1;2")
   end
@@ -61,5 +61,17 @@ class TestStringCalculator < Minitest::Test
     assert_equal 2, @calculator.add('1001,2')
     assert_equal 1006, @calculator.add("//)\n1\n2,3\n)\n1000)")
     assert_equal 8, @calculator.add("4\n\n3\n1001,\n1002,\n\n1003,\n1")
+  end
+
+  # format: "//[delimiter delimiter]\n.."
+  def test_multi_char_delimiter
+    assert_equal 6, @calculator.add("//[***]\n1***2***3")
+    assert_equal 6, @calculator.add("//[**]\n1**2\n*3*****")
+  end
+
+  # format: "//[delimiter1][delimiter2]\n.."
+  def test_multiple_delimiters
+    assert_equal 6, @calculator.add("//[*][%]\n1*2%3")
+    assert_equal 12, @calculator.add("//[^][#]\n1#2^3#6^#^#^")
   end
 end
