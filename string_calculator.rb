@@ -13,6 +13,11 @@ class StringCalculator
     return 0 if string.empty?
 
     # If the string contains only one number, return that number
-    string.to_i
+    comma_separated = string.split(',')
+    if comma_separated.size > 1
+      comma_separated.map(&:to_i).reduce(:+)
+    else
+      string.to_i
+    end
   end
 end
