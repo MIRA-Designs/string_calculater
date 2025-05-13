@@ -15,7 +15,14 @@ class StringCalculator
     # If the string is empty, return 0
     return 0 if string.empty?
 
-    # If the string contains only one number, return that number
+    # if the string contains a custom delimiter, extract it
+    if string.start_with?('//')
+      # Extract the custom delimiter
+      delimiter = string[2]
+      string = string.gsub("//#{delimiter}\n", '').gsub(delimiter, ',')
+    end
+
+    # If the string contains only one number, return that number. Ommit newlines and split by commas
     comma_separated = string.gsub("\n", ',').split(',')
     comma_separated.map(&:to_i).reduce(:+)
   end
