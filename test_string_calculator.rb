@@ -24,4 +24,8 @@ class TestStringCalculator < Minitest::Test
   def test_two_numbers_comma_separated
     assert_equal 3, @calculator.add('1,2')
   end
+
+  def test_unknown_amount_of_numbers
+    assert_equal 335, @calculator.add('1,23,55,77,83,70,26')
+  end
 end
