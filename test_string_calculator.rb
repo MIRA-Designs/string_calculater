@@ -59,7 +59,7 @@ class TestStringCalculator < Minitest::Test
 
   def test_ignore_numbers_greater_than_thousand
     assert_equal 2, @calculator.add('1001,2')
-    assert_equal 1006, @calculator.add("//)1\n2,3\n)\n1000)")
+    assert_equal 1006, @calculator.add("//)\n1\n2,3\n)\n1000)")
     assert_equal 8, @calculator.add("4\n\n3\n1001,\n1002,\n\n1003,\n1")
   end
 end
