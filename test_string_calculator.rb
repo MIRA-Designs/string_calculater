@@ -20,4 +20,8 @@ class TestStringCalculator < Minitest::Test
   def test_single_number_string
     assert_equal 1, @calculator.add('1')
   end
+
+  def test_two_numbers_comma_separated
+    assert_equal 3, @calculator.add('1,2')
+  end
 end
