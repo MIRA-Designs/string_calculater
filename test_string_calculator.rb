@@ -48,7 +48,7 @@ class TestStringCalculator < Minitest::Test
   end
 
   def test_negative_number_raise_exception
-    assert_raises(Exception) { @calculator.add('-1,2') }
-    assert_match(/negatives not allowed: -1/, @calculator.add('-1,2'))
+    error = assert_raises(Exception) { @calculator.add('-1,2') }
+    assert_match(/negative numbers not allowed -1/, error.message)
   end
 end

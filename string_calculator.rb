@@ -11,11 +11,16 @@
 #   3. The `add` method should handle newlines between numbers
 #   4. The `add` method should also handle custom delimiters by allowing the user to specify a delimiter
 #        at the beginning of the string after the `//` prefix
+#   5. The `add` method raising an exception if negative numbers present in the string
 ##################################################################################
 class StringCalculator
   def add(string)
     # If the string is empty, return 0
     return 0 if string.empty?
+
+    # If the string contains negative numbers, raise an exception
+    negative_numbers = string.scan(/-\d+/)
+    raise "negative numbers not allowed #{negative_numbers.join(', ')}" if negative_numbers.any?
 
     # if the string contains a custom delimiter, extract it
     if string.start_with?('//')
