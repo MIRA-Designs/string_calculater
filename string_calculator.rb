@@ -5,10 +5,14 @@
 #   The `add` method takes a string that contains numbers separated by commas, delimiters, or newlines
 #   and returns the sum of numbers by ommitting the delimiters, commas, and newlines
 #   1. The `add` method should return 0 for an empty string
+#      The `add` method should return the number itself for a single number
 ##################################################################################
 class StringCalculator
   def add(string)
     # If the string is empty, return 0
-    0 if string.empty?
+    return 0 if string.empty?
+
+    # If the string contains only one number, return that number
+    string.to_i
   end
 end
