@@ -42,14 +42,10 @@ class StringCalculator
   def extract_custom_delimiters(string)
     # handle custom delimiter: //delimiter\n
     if string.start_with?('//[')
-      delimiter = string[3]
-      first_newline_pos = string.index("\n")
-      string[first_newline_pos + 1..].tr(delimiter, ',')
+      string_after_newline(string, string[3])
     # handle bracketed delimiters: //[delimiter..]\n
     elsif string.start_with?('//')
-      delimiter = string[2]
-      first_newline_pos = string.index("\n")
-      string[first_newline_pos + 1..].tr(delimiter, ',')
+      string_after_newline(string, string[2])
     else
       string
     end
@@ -59,5 +55,10 @@ class StringCalculator
   def numbers_array(string)
     comma_separated = string.tr("\n", ',').split(',')
     comma_separated.map(&:to_i)
+  end
+
+  def string_after_newline(string, delimiter)
+    first_newline_pos = string.index("\n")
+    string[first_newline_pos + 1..].tr(delimiter, ',')
   end
 end
