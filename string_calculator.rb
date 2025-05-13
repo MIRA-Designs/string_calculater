@@ -8,6 +8,7 @@
 #      The `add` method should return the number itself for a single number
 #      The `add` method should return the sum of numbers for a string with multiple numbers
 #   2. The `add` method should handle unknown amount of numbers
+#   3. The `add` method should handle newlines between numbers
 ##################################################################################
 class StringCalculator
   def add(string)
@@ -15,7 +16,7 @@ class StringCalculator
     return 0 if string.empty?
 
     # If the string contains only one number, return that number
-    comma_separated = string.split(',')
+    comma_separated = string.gsub("\n", ',').split(',')
     comma_separated.map(&:to_i).reduce(:+)
   end
 end
