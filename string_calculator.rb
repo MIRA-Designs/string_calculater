@@ -19,13 +19,12 @@ class StringCalculator
 
     # if the string contains a custom delimiter, extract it
     if string.start_with?('//')
-      # Extract the custom delimiter
       delimiter = string[2]
-      string = string.gsub("//#{delimiter}\n", '').gsub(delimiter, ',')
+      string = string[4..].tr(delimiter, ',')
     end
 
     # If the string contains only one number, return that number. Ommit newlines and split by commas
-    comma_separated = string.gsub("\n", ',').split(',')
-    comma_separated.map(&:to_i).reduce(:+)
+    comma_separated = string.tr("\n", ',').split(',')
+    comma_separated.map(&:to_i).sum
   end
 end
