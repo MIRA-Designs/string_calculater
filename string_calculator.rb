@@ -16,6 +16,8 @@
 #   7. The `add` method should ignore numbers greater than 1000
 #   8. Delimiters can be of any length with the format: "//[delimiter delimiter ..]\n..."
 #   9. Allow multiple delimiters with the format: "//[delimiter1][delimiter2]\n.."
+#   10. The `add` method should also handle multiple delimiters with length longer than one character
+#       with format: "//[delimiter1delimiter1][delimiter2delimiter2]\n1delimiter1delimiter12delimiter2delimiter23"
 ##################################################################################
 class StringCalculator
   MAX_VALUE = 1000

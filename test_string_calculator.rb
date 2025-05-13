@@ -74,4 +74,11 @@ class TestStringCalculator < Minitest::Test
     assert_equal 6, @calculator.add("//[*][%]\n1*2%3")
     assert_equal 12, @calculator.add("//[^][#]\n1#2^3#6^#^#^")
   end
+
+  # format: "//[delimiter1 delimiter1][delimiter2 delimiter2]\n.."
+  def test_multiple_delimiters_more_than_one
+    assert_equal 6, @calculator.add("//[**][%%]\n1**2%%3")
+    assert_equal 10, @calculator.add("//[***][)))]\n1***2\n***3***))***)))4)))")
+    assert_equal 10, @calculator.add("//[***][)))][&&]\n1***2\n***&&3***))***)))&&4)))&&")
+  end
 end
