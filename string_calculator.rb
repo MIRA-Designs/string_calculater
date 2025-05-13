@@ -13,8 +13,10 @@
 #        at the beginning of the string after the `//` prefix
 #   5. The `add` method raising an exception if negative numbers present in the string
 #   6. The `add` method should also handle multiple negative numbers showing all negative numbers in exception message
+#   7. The `add` method should ignore numbers greater than 1000
 ##################################################################################
 class StringCalculator
+  MAX_VALUE = 1000
   def add(string)
     # If the string is empty, return 0
     return 0 if string.empty?
@@ -23,7 +25,8 @@ class StringCalculator
     string = extract_custom_delimiters(string)
 
     numbers = numbers_array(string)
-    numbers.sum
+    # sum in one pass, ignoring values > MAX_VALUE
+    numbers.sum { |n| n <= MAX_VALUE ? n : 0 }
   end
 
   private
