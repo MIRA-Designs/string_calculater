@@ -46,4 +46,9 @@ class TestStringCalculator < Minitest::Test
   def test_custom_multi_char_delimiter
     assert_equal 11, @calculator.add("//;\n2,3\n\n \n \n 4; 2;")
   end
+
+  def test_negative_number_raise_exception
+    assert_raises(Exception) { @calculator.add('-1,2') }
+    assert_match(/negatives not allowed: -1/, @calculator.add('-1,2'))
+  end
 end
