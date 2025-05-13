@@ -41,4 +41,9 @@ class TestStringCalculator < Minitest::Test
   def test_custom_single_char_delimiter
     assert_equal 3, @calculator.add("//;\n1;2")
   end
+
+  # format: //[delimiter]\n[numbers][delimiter][numbers][delimiter][numbers][delimiter]
+  def test_custom_multi_char_delimiter
+    assert_equal 11, @calculator.add("//;\n2,3\n\n \n \n 4; 2;")
+  end
 end

@@ -9,6 +9,8 @@
 #      The `add` method should return the sum of numbers for a string with multiple numbers
 #   2. The `add` method should handle unknown amount of numbers
 #   3. The `add` method should handle newlines between numbers
+#   4. The `add` method should also handle custom delimiters by allowing the user to specify a delimiter
+#        at the beginning of the string after the `//` prefix
 ##################################################################################
 class StringCalculator
   def add(string)
