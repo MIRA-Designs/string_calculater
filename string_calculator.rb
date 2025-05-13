@@ -44,11 +44,12 @@ class StringCalculator
     # if string format: //[delimiter delimiter ..]\n... or //[delimiter1][delimiter2]\n...
     multi_delimiters = string.scan(/\[(.*?)\]/).flatten
     if multi_delimiters.any?
-      multi_delimiters.each { |delimiter| string = string_after_newline(string, delimiter) }
-      string
+      multi_delimiters.each { |delimiter| string = replace_delimiter_by_comma(string, delimiter) }
+      string_after_newline(string)
     # if string format: //delimiter\n...
     elsif string.start_with?('//')
-      string_after_newline(string, string[2])
+      string = replace_delimiter_by_comma(string, string[2])
+      string_after_newline(string)
     else
       string
     end
@@ -60,9 +61,13 @@ class StringCalculator
     comma_separated.map(&:to_i)
   end
 
-  def string_after_newline(string, delimiter)
-    first_newline_pos = string.index("\n")
-    string = string[first_newline_pos + 1..] if first_newline_pos
+  # Extract the string after the first newline character
+  def string_after_newline(string)
+    first_newline_pos = string.index("\n") + 1
+    string[first_newline_pos..]
+  end
+
+  def replace_delimiter_by_comma(string, delimiter)
     string.tr(delimiter, ',')
   end
 end
