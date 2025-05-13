@@ -7,6 +7,7 @@
 ##################################################################################
 class StringCalculator
   def add(string)
-    # to be implemented
+    # If the string is empty, return 0
+    0 if string.empty?
   end
 end
