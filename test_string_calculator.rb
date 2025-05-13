@@ -51,4 +51,9 @@ class TestStringCalculator < Minitest::Test
     error = assert_raises(Exception) { @calculator.add('-1,2') }
     assert_match(/negative numbers not allowed -1/, error.message)
   end
+
+  def test_multiple_negative_numbers
+    error = assert_raises(Exception) { @calculator.add("//;\n2,-3\n\n \n -8\n 4; -2;") }
+    assert_match(/negative numbers not allowed -3, -8, -2/, error.message)
+  end
 end
