@@ -25,9 +25,11 @@ class StringCalculator
     # If the string is empty, return 0
     return 0 if string.empty?
 
-    raise_if_negatives!(string)
-    string = extract_custom_delimiters(string)
+    negative_numbers, delimiters = extract_delimiter_and_negatives(string)
+    # If the string contains negative numbers, raise an exception
+    raise "negative numbers not allowed #{negative_numbers.join(', ')}" if negative_numbers.any?
 
+    string = replace_delimiters(string, delimiters)
     numbers = numbers_array(string)
     # sum in one pass, ignoring values > MAX_VALUE
     numbers.sum { |n| n <= MAX_VALUE ? n : 0 }
@@ -35,18 +37,21 @@ class StringCalculator
 
   private
 
-  # If the string contains negative numbers, raise an exception
-  def raise_if_negatives!(string)
-    negative_numbers = string.scan(/-\d+/)
-    raise "negative numbers not allowed #{negative_numbers.join(', ')}" if negative_numbers.any?
+  # if the string contains a custom delimiter, negative numbers then extract it
+  def extract_delimiter_and_negatives(string)
+    negative_numbers = []
+    delimiters = []
+    string.scan(/(-\d+)|\[(.*?)\]/) do |negative, delimiter|
+      negative_numbers << negative if negative
+      delimiters << delimiter if delimiter
+    end
+    [negative_numbers, delimiters]
   end
 
-  # if the string contains a custom delimiter, extract it
-  def extract_custom_delimiters(string)
-    # if string format: //[delimiter delimiter ..]\n... or //[delimiter1][delimiter2]\n...
-    multi_delimiters = string.scan(/\[(.*?)\]/).flatten
-    if multi_delimiters.any?
-      multi_delimiters.each { |delimiter| string = replace_delimiter_by_comma(string, delimiter) }
+  # if string format: //[delimiter delimiter ..]\n... or //[delimiter1][delimiter2]\n...
+  def replace_delimiters(string, delimiters)
+    if delimiters.any?
+      delimiters.each { |delimiter| string = replace_delimiter_by_comma(string, delimiter) }
       string_after_newline(string)
     # if string format: //delimiter\n...
     elsif string.start_with?('//')
