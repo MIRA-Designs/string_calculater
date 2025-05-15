@@ -56,7 +56,7 @@ class StringCalculator
     delimiters.empty? && string.start_with?('//') && delimiters = [string[2]]
     return string if delimiters.empty?
 
-    delimiters.each { |delimiter| string = string.tr(delimiter, ',') }
+    string = string.tr("\\#{delimiters.join('\\')}", ',')
     # Extract the string after the first newline character
     first_newline_pos = string.index("\n") + 1
     string[first_newline_pos..]
