@@ -49,29 +49,20 @@ class StringCalculator
     [negative_numbers, delimiters_in_brackets]
   end
 
-  # replace the delimiters in the string that contain in brackets (eg: [<delimiter>][<delimiter>])
+  # 1. Replace the delimiters in the string that contain in brackets (eg: [<delimiter>][<delimiter>])
   # and the only delimiter (eg: //<delimiter>\n) after the `//` prefix with comma
-  # and retun the string after the first newline character.
+  # 2. Return the string after the first newline character.
   def replace_delimiters(string, delimiters_in_brackets)
     if delimiters_in_brackets.any?
-      delimiters_in_brackets.each { |delimiter| string = replace_delimiter_by_comma(string, delimiter) }
-      string_after_newline(string)
+      delimiters_in_brackets.each { |delimiter| string = string.tr(delimiter, ',') }
+
+      # Extract the string after the first newline character
+      first_newline_pos = string.index("\n") + 1
+      string[first_newline_pos..]
     elsif string.start_with?('//')
-      delimiter = string[2]
-      string = replace_delimiter_by_comma(string, delimiter)
-      string_after_newline(string)
+      replace_delimiters(string, [string[2]])
     else
       string
     end
-  end
-
-  def replace_delimiter_by_comma(string, delimiter)
-    string.tr(delimiter, ',')
-  end
-
-  # Extract the string after the first newline character
-  def string_after_newline(string)
-    first_newline_pos = string.index("\n") + 1
-    string[first_newline_pos..]
   end
 end
