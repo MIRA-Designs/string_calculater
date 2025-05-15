@@ -30,9 +30,9 @@ class StringCalculator
     raise "negative numbers not allowed #{negative_numbers.join(', ')}" if negative_numbers.any?
 
     string = replace_delimiters(string, delimiters)
-    numbers = numbers_array(string)
+    string_array = string.tr("\n", ',').split(',')
     # sum in one pass, ignoring values > MAX_VALUE
-    numbers.sum { |n| n <= MAX_VALUE ? n : 0 }
+    string_array.sum { |n| (number = n.to_i) > MAX_VALUE ? 0 : number }
   end
 
   private
@@ -60,12 +60,6 @@ class StringCalculator
     else
       string
     end
-  end
-
-  # Replace new lines with commas and split by comma
-  def numbers_array(string)
-    comma_separated = string.tr("\n", ',').split(',')
-    comma_separated.map(&:to_i)
   end
 
   # Extract the string after the first newline character
