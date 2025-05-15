@@ -25,14 +25,19 @@ This project demonstrates TDD in action by incrementally building a calculator t
 
 ## Installation
 
+Install ruby programming language from: https://www.ruby-lang.org/en/documentation/installation/
+
+Open command line and do:
+
 ```bash
 git clone https://github.com/MIRA-Designs/string_calculater
 cd string_calculator
-irb
+irb # open ruby console
 require_relative 'string_calculator'
 
 calculator = StringCalculator.new
-puts calculator.add("1,2,3")
+calculator.add("1,2,3")
+calculator.add("//[*]\n1*2**")
 
 ruby test_string_calculator.rb # run tests
 
