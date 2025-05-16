@@ -31,9 +31,8 @@ class StringCalculator
     raise "negative numbers not allowed #{negative_numbers.join(', ')}" if negative_numbers.any?
 
     string = replace_delimiters(string, delimiters_in_brackets)
-    string_array = string.tr("\n", ',').split(',')
-    # sum in one pass, ignoring values > MAX_VALUE
-    string_array.sum { |n| (number = n.to_i) > MAX_VALUE ? 0 : number }
+    # get only numbers, ignoring numbers > MAX_VALUE and sum them
+    string.scan(/\d+/).sum { |n| (number = n.to_i) <= MAX_VALUE ? number : 0 }
   end
 
   private
