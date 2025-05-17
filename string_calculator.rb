@@ -23,21 +23,27 @@
 class StringCalculator
   MAX_VALUE = 1000
   def add(string)
-    # If the string is empty, return 0
     return 0 if string.empty?
 
     negative_numbers, delimiters_in_brackets = extract_delimiter_and_negatives(string)
-    # If the string contains negative numbers, raise an exception
     raise "negative numbers not allowed #{negative_numbers.join(', ')}" if negative_numbers.any?
 
     string = replace_delimiters(string, delimiters_in_brackets)
-    # get only numbers, ignoring numbers > MAX_VALUE and sum them
+
+    # Extract all numbers from the string (ignoring newlines and spaces) and calculate their sum.
+    # Numbers greater than MAX_VALUE are ignored in the sum.
     string.scan(/\d+/).sum { |n| (number = n.to_i) <= MAX_VALUE ? number : 0 }
   end
 
   private
 
-  # if the string contains a custom delimiter, negative numbers then extract it
+  # Extracts all negative numbers and custom delimiters from the input string.
+  # Returns an array of negative numbers (as strings) and an array of delimiters (as strings).
+  # - Negative numbers are detected anywhere in the string (e.g., "-1").
+  # - Custom delimiters are detected in the format //[<delimiter1>][<delimiter2>]...\n.
+  # Example:
+  #   extract_delimiter_and_negatives("//[***][%]\n1***-2%3")
+  #   => [["-2"], ["***", "%"]]
   def extract_delimiter_and_negatives(string)
     negative_numbers = []
     delimiters_in_brackets = []
@@ -48,16 +54,20 @@ class StringCalculator
     [negative_numbers, delimiters_in_brackets]
   end
 
-  # 1. Replace the delimiters in the string that contain in brackets (eg: [<delimiter>][<delimiter>])
-  # and the only delimiter (eg: //<delimiter>\n) after the `//` prefix with comma
-  # 2. Return the string after the first newline character.
+  # Replaces all custom delimiters in the input string with commas to standardize separation.
+  # Handles single/multiple delimiters, including those of any length specified in brackets (e.g., //[***][%]\n).
+  # Also handle single-character delimiter if provided (e.g., //;\n1;2), it is also replaced.
+  # Returns the substring after the first newline character, which contains the actual numbers to process.
   def replace_delimiters(string, delimiters)
-    delimiters.empty? && string.start_with?('//') && delimiters = [string[2]]
+    single_char_delimiter = delimiters.empty? && string.start_with?('//')
+    single_char_delimiter && delimiters = [string[2]]
     return string if delimiters.empty?
 
+    # use escape character `\\` to support delimiters like ^ in `#tr`
     string = string.tr("\\#{delimiters.join('\\')}", ',')
+
     # Extract the string after the first newline character
-    first_newline_pos = string.index("\n") + 1
-    string[first_newline_pos..]
+    first_newline_pos = string.index("\n")
+    first_newline_pos ? string[(first_newline_pos + 1)..] : string
   end
 end
