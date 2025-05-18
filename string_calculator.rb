@@ -63,8 +63,8 @@ class StringCalculator
     single_char_delimiter && delimiters = [string[2]]
     return string if delimiters.empty?
 
-    # use escape character `\\` to support delimiters like ^ in `#tr`
-    string = string.tr("\\#{delimiters.join('\\')}", ',')
+    # use escape for delimiters that have special meaning in regular expression like ^ in `#tr`
+    string = string.tr(Regexp.escape(delimiters.join), ',')
 
     # Extract the string after the first newline character
     first_newline_pos = string.index("\n")
