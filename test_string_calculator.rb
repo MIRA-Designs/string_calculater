@@ -81,4 +81,8 @@ class TestStringCalculator < Minitest::Test
     assert_equal 10, @calculator.add("//[***][)))]\n1***2\n***3***))***)))4)))")
     assert_equal 10, @calculator.add("//[***][)))][&&]\n1***2\n***&&3***))***)))&&4)))&&")
   end
+
+  def test_custom_delimiter_as_star_symbol
+    assert_equal 15, @calculator.add("//*\n1*5*3")
+  end
 end
