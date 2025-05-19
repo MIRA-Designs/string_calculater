@@ -29,14 +29,9 @@ class StringCalculator
     raise "negative numbers not allowed #{negative_numbers.join(', ')}" if negative_numbers.any?
 
     string, calculation = replace_delimiters(string, delimiters_in_brackets)
-    # Extract all numbers from the string (ignoring newlines and spaces) and calculate their sum.
-    # Numbers greater than MAX_VALUE are ignored in the sum.
-    if calculation == 'addition'
-      return string.scan(/\d+/).sum { |n| (number = n.to_i) <= MAX_VALUE ? number : 0 }
-    end
+    return add_numbers(string) if calculation == 'addition'
 
-    # Multiply all numbers in the string (ignoring newlines and spaces).
-    string.scan(/\d+/).inject(1) { |mul, n| mul * n.to_i } if calculation == 'multiplication'
+    multiply_numbers(string)
   end
 
   private
@@ -68,7 +63,7 @@ class StringCalculator
     single_char_delimiter && delimiters = [string[2]]
     return [string, calculation] if delimiters.empty?
 
-    # check if the delimiter is a start symbol
+    # Multiply the numbers if the delimiter is a `*` symbol
     calculation = 'multiplication' if delimiters.include?('*')
 
     # use escape for delimiters that have special meaning in regular expression like ^ in `#tr`
@@ -79,5 +74,16 @@ class StringCalculator
     str_after_first_newline = first_newline_pos ? string[(first_newline_pos + 1)..] : string
 
     [str_after_first_newline, calculation]
+  end
+
+  # Extract all numbers from the string (ignoring newlines and spaces) and calculate their sum.
+  # Numbers greater than MAX_VALUE are ignored in the sum.
+  def add_numbers(string)
+    string.scan(/\d+/).sum { |n| (number = n.to_i) <= MAX_VALUE ? number : 0 }
+  end
+
+  # Multiply all numbers in the string (ignoring newlines and spaces).
+  def multiply_numbers(string)
+    string.scan(/\d+/).inject(1) { |mul, n| mul * n.to_i }
   end
 end
