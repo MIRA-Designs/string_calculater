@@ -28,11 +28,15 @@ class StringCalculator
     negative_numbers, delimiters_in_brackets = extract_delimiter_and_negatives(string)
     raise "negative numbers not allowed #{negative_numbers.join(', ')}" if negative_numbers.any?
 
-    string = replace_delimiters(string, delimiters_in_brackets)
-
+    string, calculation = replace_delimiters(string, delimiters_in_brackets)
     # Extract all numbers from the string (ignoring newlines and spaces) and calculate their sum.
     # Numbers greater than MAX_VALUE are ignored in the sum.
-    string.scan(/\d+/).sum { |n| (number = n.to_i) <= MAX_VALUE ? number : 0 }
+    if calculation == 'addition'
+      return string.scan(/\d+/).sum { |n| (number = n.to_i) <= MAX_VALUE ? number : 0 }
+    end
+
+    # Multiply all numbers in the string (ignoring newlines and spaces).
+    string.scan(/\d+/).inject(1) { |mul, n| mul * n.to_i } if calculation == 'multiplication'
   end
 
   private
@@ -59,15 +63,21 @@ class StringCalculator
   # Also handle single-character delimiter if provided (e.g., //;\n1;2), it is also replaced.
   # Returns the substring after the first newline character, which contains the actual numbers to process.
   def replace_delimiters(string, delimiters)
+    calculation = 'addition'
     single_char_delimiter = delimiters.empty? && string.start_with?('//')
     single_char_delimiter && delimiters = [string[2]]
-    return string if delimiters.empty?
+    return [string, calculation] if delimiters.empty?
+
+    # check if the delimiter is a start symbol
+    calculation = 'multiplication' if delimiters.include?('*')
 
     # use escape for delimiters that have special meaning in regular expression like ^ in `#tr`
     string = string.tr(Regexp.escape(delimiters.join), ',')
 
     # Extract the string after the first newline character
     first_newline_pos = string.index("\n")
-    first_newline_pos ? string[(first_newline_pos + 1)..] : string
+    str_after_first_newline = first_newline_pos ? string[(first_newline_pos + 1)..] : string
+
+    [str_after_first_newline, calculation]
   end
 end
